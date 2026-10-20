@@ -126,6 +126,58 @@ def run(api,body,source):
     record['saved_path']=api.save_composition(record)
     return record
 
+def repair(api, record, body):
+    """Repair one invalid voice, retaining the original composition."""
+    import re
+    if not isinstance(record,dict) or not record.get('validation_error') or record.get('mode') not in ('compose','continue','instruments'):
+        raise c.ScoreError('Kein korrigierbarer Kompositionsentwurf ausgewählt.')
+    error=record['validation_error']
+    match=re.search(r'System (\\d+), Takt (\\d+), Stimme (\\d+): .* statt .*',error)
+    if not match:raise c.ScoreError('Dieser Fehler benötigt eine andere Korrektur. Original bleibt erhalten.')
+    si,bi,vi=(int(v)-1 for v in match.groups())
+    original=score_response.decode(record['raw_response'],[])
+    staves=original.get('staves',[])
+    try:voice=staves[si]['bars'][bi]['voices'][vi]
+    except (KeyError,IndexError,TypeError):raise c.ScoreError('Fehlerstelle ist im Original nicht eindeutig vorhanden.') from None
+    if not isinstance(voice,list):raise c.ScoreError('Ungültige ursprüngliche Stimme.')
+    meter=original['time']
+    for bar in staves[si]['bars'][:bi+1]:
+        if 'time' in bar:meter=bar['time']
+    import fractions
+    wanted=int(fractions.Fraction(meter[0]*4,meter[1])*960)
+    context={'Fehler':error,'Taktart':meter,'Soll_Ticks':wanted,
+             'System':si+1,'Takt':bi+1,'Stimme':vi+1,
+             'Zu_korrigierende_Stimme':voice,
+             'Vorheriger_Takt':staves[si]['bars'][bi-1] if bi else None,
+             'Aktueller_Takt':staves[si]['bars'][bi],
+             'Folgetakt':staves[si]['bars'][bi+1] if bi+1<len(staves[si]['bars']) else None}
+    prompt=('Repariere ausschließlich die rhythmisch ungültige einzelne Stimme. '
+            'Erhalte Melodie, Harmonik und Artikulation so weit wie möglich. '
+            'Antworte mit einem JSON-Objekt der Form {"voice": [["q",["C4"]], ...]}. '
+            'Das Feld voice ersetzt EXAKT eine Stimme eines Takts, keine anderen Felder. '
+            'Die Summe ihrer Notendauern muss exakt Soll_Ticks ergeben. '
+            'Keine Lua-Skripte, keine zusätzliche Erklärung.')
+    reply=api.query_model(body['provider'],body['key'],body['model'],prompt,json.dumps(context,ensure_ascii=False),body.get('limit',8192),json_output=True)
+    try:
+        answer=w.parse_json(reply['answer'])
+        corrected=answer['voice']
+        if not isinstance(corrected,list):raise ValueError('voice ist keine Liste')
+    except (KeyError,TypeError,ValueError) as e:raise c.ScoreError('KI-Korrektur hat kein gültiges voice-Feld geliefert: '+str(e)) from None
+    revised=copy.deepcopy(original)
+    revised['staves'][si]['bars'][bi]['voices'][vi]=corrected
+    warnings=[]
+    validated=prepare_score(revised,record['mode'],record.get('source'),record.get('ensemble',[]),record['bars'],record.get('transition_bars',0),warnings)
+    result=copy.deepcopy(record)
+    result.update(id=uuid.uuid4().hex,composition=validated,validation_error=None,warnings=warnings,
+                  raw_response=json.dumps(revised,ensure_ascii=False),repair_of=record['id'],
+                  repair_location={'staff':si+1,'bar':bi+1,'voice':vi+1},
+                  repair_usage=reply.get('usage',{}),repair_model=body['model'],applied=False)
+    result.pop('saved_path',None)
+    result['saved_path']=api.save_composition(result)
+    if not result['saved_path']:raise c.ScoreError('Korrektur gültig, aber Sicherung fehlgeschlagen; Original unverändert.')
+    return result
+
+
 def apply(api,record,score_id,path):
     mode=record['mode']
     if mode=='analysis':raise c.ScoreError('Eine Analyse verändert keine Noten.')
@@ -215,6 +267,11 @@ def dispatch(server,route,body,api):
     if route=='/workspace/run':
         source=server.workspaces.get(body.get('source_id'))
         record=run(api,body,source);server.compositions[record['id']]=record;return record
+    if route=='/workspace/repair':
+        original=server.compositions.get(body.get('id'))
+        result=repair(api,original,body)
+        server.compositions[result['id']]=result
+        return result
     if route=='/workspace/review':
         import review
         analysis=server.compositions.get(body.get('id'))
