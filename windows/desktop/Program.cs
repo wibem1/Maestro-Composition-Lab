@@ -14,7 +14,7 @@ using Microsoft.Web.WebView2.WinForms;
 
 namespace MaestroDesktop {
  static class Program {
-  public const string Version="3.0.0";
+  public const string Version="3.0.1";
   public static readonly string Root=AppDomain.CurrentDomain.BaseDirectory;
   public static readonly string Data=Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),"Maestro-Composition-Lab");
   public static readonly JavaScriptSerializer Json=new JavaScriptSerializer { MaxJsonLength=32000000 };
