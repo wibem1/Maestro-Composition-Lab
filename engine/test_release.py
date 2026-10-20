@@ -8,7 +8,7 @@ class ReleaseTests(unittest.TestCase):
   pages=[(ROOT/'ui'/name).read_text(encoding='utf-8') for name in ('mac.html','windows.html')]
   self.assertEqual(*[set(re.findall(r'id="([^"]+)"',p)) for p in pages])
   for page in pages:
-   self.assertIn('Maestro · 3.0.0 · 20.10.2026',page)
+   self.assertIn('Maestro · 3.0.1 · 20.10.2026',page)
    self.assertIn("r.warnings.join",page)
  def test_invalid_optional_annotation_warns_without_changing_notes(self):
   value=fragment();value['staves'][0]['slurs']=[[1,1,1,99,1,1]]
@@ -23,4 +23,4 @@ class ReleaseTests(unittest.TestCase):
  def test_truncated_answer_does_not_invent_music(self):
   with self.assertRaises(ValueError):score_response.decode(json.dumps(fragment())[:-20],[])
  def test_native_assembly_version(self):
-  self.assertIn('<Version>3.0.0</Version>',(ROOT.parent/'windows/desktop/MaestroDesktop.csproj').read_text(encoding='utf-8'))
+  self.assertIn('<Version>3.0.1</Version>',(ROOT.parent/'windows/desktop/MaestroDesktop.csproj').read_text(encoding='utf-8'))
