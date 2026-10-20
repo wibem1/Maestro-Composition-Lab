@@ -2,7 +2,7 @@
 import hashlib,json,os,shutil,subprocess,sys
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[1]
-VERSION='3.0.0'
+VERSION='3.0.1'
 def main():
  if sys.platform!='win32':raise RuntimeError('Native Windows build required')
  package=ROOT/'dist'/f'Maestro-Composition-Lab-{VERSION}-Windows'
