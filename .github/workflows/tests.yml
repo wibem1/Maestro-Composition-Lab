@@ -84,3 +84,25 @@ jobs:
           name: Maestro-Composition-Lab-3.0.0-Mac-${{ matrix.label }}
           path: Maestro-Composition-Lab-3.0.0-Mac-${{ matrix.label }}.zip
           if-no-files-found: error
+  preview:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [core, windows, mac]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: Maestro-Composition-Lab-3.0.0-*
+          path: packages
+          merge-multiple: true
+      - name: Publish tested installation packages as a prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view v3.0.0-rc.1 >/dev/null 2>&1; then
+            echo 'Existing reference release preserved.'
+            exit 0
+          fi
+          gh release create v3.0.0-rc.1 packages/*.zip --target "$GITHUB_SHA" --prerelease --title 'Maestro Composition Lab 3.0.0 — Prüffassung 1' --notes-file RELEASE_NOTES.md
