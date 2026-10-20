@@ -1,0 +1,5 @@
+Laufzeitkomponenten: CPython (PSF-Lizenz), PyObjC (MIT), certifi (MPL-2.0), Microsoft WebView2 SDK (Microsoft-Lizenz).
+Mac-Versionen, Bezugsquellen und SHA256-Prüfsummen stehen in macos/dependencies.json; die zugehörigen Lizenzmetadaten verbleiben in der gebündelten Laufzeit.
+Windows verwendet CPython 3.13 aus actions/setup-python; exakte Laufzeitversion und Quellcommit stehen im Paket in BUILD.json. CPython LICENSE.txt wird mitgeliefert.
+Microsoft .NET Framework und WebView2 Runtime sind externe Systemvoraussetzungen.
+Maestro wird nicht mitgeliefert. Composition Lab ist eine unabhängige Begleit-App.

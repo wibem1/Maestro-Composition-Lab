@@ -1,15 +1,22 @@
-# Maestro Composition Lab 3.0 — gemeinsamer Quellstand
+# Maestro Composition Lab 3.0.0
 
-Gemeinsame musikalische Engine `engine/*.py`; **getrennte plattformspezifische Oberflächen** unter `engine/ui/mac.html` und `engine/ui/windows.html`. Die Engine wählt zur Laufzeit anhand des Betriebssystems genau eine Oberfläche. Native Hosts bleiben unter `macos/mac_host/` und `windows/desktop/`.
+Gemeinsame Engine, getrennte Mac- und Windows-Oberflächen. Native Hosts: AppKit/WKWebView und WinForms/WebView2.
 
-## Herkunft
+**Prüfkandidat, noch kein vollständig freigegebenes stabiles Release.** Installierbare ZIP-Pakete werden nach erfolgreichen nativen Tests in [GitHub Actions](https://github.com/wibem1/Maestro-Composition-Lab/actions) bereitgestellt. Echte Maestro-Praxistests stehen aus.
 
-Windows-Referenz 2.5.1 (GitHub-Basispaket vom 19.10.2026). Mac-Referenz 2.6.9 (Mac-Intel-Paket vom 19.10.2026). Neuere Mac-Engine-Fixes wurden in die gemeinsame Engine übernommen; die Windows-Oberfläche wurde aus der ursprünglichen Windows-Referenz konserviert und nicht durch das Mac-Layout ersetzt.
+- [Architektur und Funktionsgleichheit](ARCHITEKTUR.md)
+- [Teststand und Einschränkungen](TESTSTAND.txt)
+- [Installation](LIESMICH.txt)
+- [Änderungen](VERSIONS.md)
 
-## Qualität / Freigabe
+Die unveränderte ZIP-Grundlage ist im Branch `reference/v3.0-source-package` erhalten. Archivierte Integrationsdateien werden nicht ausgeliefert.
 
-Dies ist ein **zusammengeführter Quellstand, kein geprüftes Release für Maestro**. Unit-Tests sind auf Linux lauffähig. Native Windows-/Mac-Builds sowie Maestro-Integrationstests sind noch auf den Zielplattformen nötig. Die Mac-Buildroutine benötigt zudem ihre externen, gepinnten Laufzeit-Abhängigkeiten und ein Icon-Asset; der Basispaketstand enthält nicht alle hierfür notwendigen Dateien.
-
-`python -m unittest discover -s engine -p 'test_*.py'`
-
-Offener Prüfungspunkt: macOS- und Windows-KI-Schlüssel- und Einstellungs-Verhalten inklusive Eingabe über die jeweiligen nativen Oberflächen.
+Lokal prüfen:
+```sh
+python -m unittest discover -s engine -p 'test_*.py'
+python engine/selftest.py
+python -m unittest discover -s macos/mac_tests
+node engine/ui_selftest.js windows
+node engine/ui_selftest.js mac
+```
+Lua-5.4-Systembibliothek für Schreibsimulationen erforderlich. Native Pakete werden ausschließlich auf dem jeweiligen Betriebssystem getestet.

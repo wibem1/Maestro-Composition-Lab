@@ -1,16 +1,81 @@
-name: Python core tests
+name: Verify and package 3.0.0
 on:
   push:
+    branches: [main]
   pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
 jobs:
-  engine:
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-    runs-on: ${{ matrix.os }}
+  core:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: python -m unittest discover -s engine -p 'test_*.py'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: sudo apt-get update && sudo apt-get install -y liblua5.4-0
+      - run: python -m unittest discover -s engine -p 'test_*.py' -v
+      - run: python engine/selftest.py
+      - run: python -m unittest discover -s macos/mac_tests -v
+      - run: node engine/ui_selftest.js windows
+      - run: node engine/ui_selftest.js mac
+  windows:
+    needs: core
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: python -m unittest discover -s engine -p 'test_*.py' -v
+      - run: python engine/selftest.py
+      - run: dotnet run --project windows/desktop-tests -- engine (Get-Command python).Source
+      - run: python windows/build_windows.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Maestro-Composition-Lab-3.0.0-Windows
+          path: Maestro-Composition-Lab-3.0.0-Windows.zip
+          if-no-files-found: error
+  mac:
+    needs: core
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15
+            arch: aarch64
+            label: AppleSilicon
+          - runner: macos-15-intel
+            arch: x86_64
+            label: Intel
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m unittest discover -s engine -p 'test_*.py' -v
+      - run: python engine/selftest.py
+      - run: python -m unittest discover -s macos/mac_tests -v
+      - run: python macos/build_mac.py --arch ${{ matrix.arch }}
+      - name: Verify bundle and native runtime
+        env:
+          LABEL: ${{ matrix.label }}
+          ARCH: ${{ matrix.arch }}
+        run: |
+          python -c 'import os; from macos.verify_bundles import verify; verify(os.environ["LABEL"],0x0100000c if os.environ["ARCH"]=="aarch64" else 0x01000007)'
+          APP="dist/Maestro-Composition-Lab-3.0.0-Mac-$LABEL/Maestro Composition Lab.app"
+          "$APP/Contents/MacOS/maestro-lab" --self-test
+          "$APP/Contents/Resources/runtime/bin/python3.13" -c 'import sys;sys.path.insert(0,"macos/mac_host");import app;print("Native AppKit delegate imported")'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Maestro-Composition-Lab-3.0.0-Mac-${{ matrix.label }}
+          path: Maestro-Composition-Lab-3.0.0-Mac-${{ matrix.label }}.zip
+          if-no-files-found: error

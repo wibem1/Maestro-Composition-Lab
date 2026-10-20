@@ -1,0 +1,7 @@
+Prüfstand 20.10.2026 — 3.0.0
+Lokal: 108 Engine-Tests, 14 Anbieter/IPC-Tests, 11 Mac-Hosttests und beide UI-Simulationen bestanden.
+Lua-Schreibtests laufen gegen ein unabhängiges Partiturmodell mit echter Lua-5.4-Ausführung.
+GitHub Actions prüft Linux-Kern, native Windows-Kompilierung, Windows-Host mit gebündeltem Python sowie beide Mac-Architekturen mit AppKit/WebKit/Security und gebündeltem Python.
+Der verbindliche native Buildstatus ist im jeweiligen Actions-Lauf sichtbar; ein eingerichteter Workflow ist kein erfolgreicher Build.
+Offen: echte Maestro-Integration, visuelle Prüfung der nativen Fenster, reale Anbieteraufrufe, Gatekeeper/SmartScreen, echter Schlüsselbund/DPAPI-Rundlauf.
+Keine kostenpflichtigen KI-Anfragen im automatisierten Test. Kein Anspruch auf vollständig getestetes stabiles Release vor Abschluss der offenen Prüfungen.

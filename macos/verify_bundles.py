@@ -9,13 +9,13 @@ def architectures(data):
  raise AssertionError('Not a Mach-O binary: '+repr(data[:4]))
 
 def verify(label,cpu):
- archive=ROOT/f'Maestro-Composition-Lab-2.6.0-Mac-{label}.zip'
+ archive=ROOT/f'Maestro-Composition-Lab-3.0.0-Mac-{label}.zip'
  with zipfile.ZipFile(archive) as z:
   assert z.testzip() is None
-  prefix=f'Maestro-Composition-Lab-2.6.0-Mac-{label}/'
+  prefix=f'Maestro-Composition-Lab-3.0.0-Mac-{label}/'
   app=prefix+'Maestro Composition Lab.app/Contents/'
   info=plistlib.loads(z.read(app+'Info.plist'))
-  assert info['CFBundleShortVersionString']=='2.6.0' and info['LSMinimumSystemVersion']=='13.0'
+  assert info['CFBundleShortVersionString']=='3.0.0' and info['LSMinimumSystemVersion']=='13.0'
   launcher=app+'MacOS/'+info['CFBundleExecutable'];assert (z.getinfo(launcher).external_attr>>16)&0o111
   subprocess.run(['/bin/sh','-n'],input=z.read(launcher),check=True)
   runtime=app+'Resources/runtime/'

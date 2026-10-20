@@ -1,0 +1,8 @@
+Maestro Composition Lab 3.0.0 — 20.10.2026
+Mac: ZIP vollständig entpacken, Maestro Composition Lab.app nach Programme kopieren.
+Windows x64: ZIP vollständig in einen eigenen Ordner entpacken, Maestro Composition Lab.exe starten. Im Menü Datei kann eine Startmenü-Verknüpfung erstellt werden. .NET Framework 4.8 und Microsoft WebView2 Evergreen Runtime werden benötigt.
+Die App-Pakete sind nicht mit einem Entwicklerzertifikat signiert/notarisiert.
+Maestro muss installiert sein und den Assistentenzugriff erlauben.
+API-Schlüssel in Einstellungen eingeben. Speicherung ist optional: Mac-Schlüsselbund / Windows DPAPI.
+Bestehende Benutzerordner bleiben erhalten. Vor Nutzung mit wichtigen Partituren eine Kopie in Maestro speichern.
+Native Starttests ersetzen keinen Praxistest mit Maestro. Siehe TESTSTAND.txt.

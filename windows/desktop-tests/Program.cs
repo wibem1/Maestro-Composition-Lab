@@ -12,7 +12,7 @@ try {
  using(var session=new BackendSession(data)) {
   await session.StartAsync(python,Path.Combine(engine,"maestro_analyse.py"));pid=session.Process.Id;
   var info=await session.PostAsync("desktop/info","{}");
-  Check(info.Contains("\"desktop\": true"),"Desktop flag missing");Check(info.Contains("2.5.1"),"Version missing");
+  Check(info.Contains("\"desktop\": true"),"Desktop flag missing");Check(info.Contains("3.0.0"),"Version missing");
   using var raw=new HttpClient(new HttpClientHandler {UseProxy=false});
   var html=await raw.GetStringAsync(session.Address);
   Check(!html.Contains("__TOKEN__"),"Session token not inserted");

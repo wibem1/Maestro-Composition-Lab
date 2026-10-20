@@ -21,7 +21,7 @@ def source_dependency(item):
 
 def icon(path):
  # Repackage the existing PNG icon sizes as ICNS without modifying their pixels.
- data=(SOURCE/'AppIcon.ico').read_bytes();count=struct.unpack_from('<H',data,4)[0];parts=[]
+ data=(ROOT/'windows/desktop/app.ico').read_bytes();count=struct.unpack_from('<H',data,4)[0];parts=[]
  tags={16:b'icp4',32:b'icp5',64:b'icp6',128:b'ic07',256:b'ic08'}
  for i in range(count):
   width,height,_,_,_,_,length,offset=struct.unpack_from('<BBBBHHII',data,6+16*i);width=width or 256;height=height or 256
@@ -102,8 +102,14 @@ exit "$MAESTRO_RESULT"
  archive=ROOT/f'Maestro-Composition-Lab-{VERSION}-Mac-{label}.zip'
  built_archive=stage/archive.name;zip_tree(destination,built_archive)
  shutil.copy2(built_archive,archive)
+ final_destination.parent.mkdir(parents=True,exist_ok=True)
+ shutil.copytree(destination,final_destination,symlinks=True,dirs_exist_ok=True)
+ shutil.rmtree(stage)
  print(label,archive.stat().st_size,archive,flush=True)
- return destination,archive
+ return final_destination,archive
 
 if __name__=='__main__':
- for arch,label in (('aarch64','AppleSilicon'),('x86_64','Intel')):build(arch,label)
+ import argparse
+ parser=argparse.ArgumentParser();parser.add_argument('--arch',choices=['aarch64','x86_64']);args=parser.parse_args()
+ for arch,label in (('aarch64','AppleSilicon'),('x86_64','Intel')):
+  if not args.arch or args.arch==arch:build(arch,label)

@@ -90,7 +90,7 @@ class AppDelegate(F.NSObject,protocols=PROTOCOLS):
 
  def about_(self,sender):
   alert=A.NSAlert.alloc().init();alert.setMessageText_(APP_NAME+' '+VERSION)
-  alert.setInformativeText_('19.10.2026\nKomponieren, analysieren, fortsetzen und überarbeiten mit Maestro.');alert.runModal()
+  alert.setInformativeText_('20.10.2026\nKomponieren, analysieren, fortsetzen und überarbeiten mit Maestro.');alert.runModal()
  def hideApp_(self,sender):A.NSApplication.sharedApplication().hide_(sender)
  def quit_(self,sender):A.NSApplication.sharedApplication().terminate_(sender)
  def zoomIn_(self,sender):self.set_zoom(min(2.4,self.zoom+0.1))

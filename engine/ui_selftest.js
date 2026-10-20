@@ -1,6 +1,6 @@
 // Independent DOM and service test model. No paid calls and no live Maestro.
 const fs=require('fs'),vm=require('vm'),assert=require('assert');
-const script=fs.readFileSync(__dirname+'/index.html','utf8').split('<script>')[1].split('</script>')[0];
+const script=fs.readFileSync(__dirname+'/ui/'+(process.argv[2]||'windows')+'.html','utf8').split('<script>')[1].split('</script>')[0];
 const makeSource=scope=>({id:'src-'+scope,score_id:'original',format:'maestro-workspace-1',guard:'snapshot',title:'Original',measure_count:2,last_note_bar:2,scope,selected_ids:scope==='all'?['a','b']:['a'],staves:[{name:'Piano',clef:'treble',measures:[{entries:[{id:'a',staff:1,bar:1,layer:1,duration:'q',pitches:['C4']},{id:'b',staff:1,bar:1,layer:1,duration:'q',pitches:['D4']}]}]}]});
 const makeComposition=(staffs,bars=1)=>({title:'Vorschlag',tempo:116,staves:Array.from({length:staffs},(_,i)=>({name:'Instrument '+i,clef:'treble',bars:Array.from({length:bars},()=>({voices:[]}))}))});
 function create(){

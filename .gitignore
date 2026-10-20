@@ -21,3 +21,8 @@ runtimes/
 Diagnose-*.json
 Maestro-App-Diagnose*.json
 Ergebnisse/
+
+build/
+dist/
+bin/
+obj/

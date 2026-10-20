@@ -1,7 +1,7 @@
 import copy,json,os,pathlib,subprocess,sys,tempfile,time,types,unittest,urllib.error,urllib.request
 from unittest.mock import patch
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-sys.path[:0]=[str(ROOT/'mac_host'),str(ROOT/'engine')]
+sys.path[:0]=[str(ROOT/'mac_host'),str(ROOT.parent/'engine')]
 import backend,native_core as n,preferences as p,mac_keys,maestro_analyse as a
 from test_workspace import fragment
 
@@ -23,10 +23,10 @@ class Tests(unittest.TestCase):
    value=n.open_json(path);self.assertEqual(value['type'],'open-composition');self.assertIn('composition',json.loads(value['text']))
  def test_native_host_starts_real_engine_with_spaces_and_saves_outside_app(self):
   with tempfile.TemporaryDirectory(prefix='Maestro Mac ä ') as folder:
-   data=pathlib.Path(folder)/'Benutzerdaten';b=backend.Backend(sys.executable,ROOT/'engine/maestro_analyse.py',data)
+   data=pathlib.Path(folder)/'Benutzerdaten';b=backend.Backend(sys.executable,ROOT.parent/'engine/maestro_analyse.py',data)
    b.start();proc=b.process
    try:
-    self.assertEqual(b.request('desktop/info',{})['version'],'2.6.0')
+    self.assertEqual(b.request('desktop/info',{})['version'],'3.0.0')
     result=b.request('workspace/load',{'text':json.dumps({'composition':fragment()})})
     self.assertTrue(pathlib.Path(result['saved_path']).is_relative_to(data))
     self.assertEqual(b.request('workspace/history',{})['total'],1)
@@ -40,7 +40,7 @@ class Tests(unittest.TestCase):
   import socket
   with tempfile.TemporaryDirectory() as folder:
    script=pathlib.Path(folder)/'parent.py'
-   script.write_text('import sys,time,json\nsys.path.insert(0,'+repr(str(ROOT/'mac_host'))+')\nfrom backend import Backend\nb=Backend(sys.executable,'+repr(str(ROOT/'engine/maestro_analyse.py'))+','+repr(str(pathlib.Path(folder)/'data'))+')\nb.start()\nprint(json.dumps({"pid":b.process.pid,"url":b.url}),flush=True)\ntime.sleep(30)')
+   script.write_text('import sys,time,json\nsys.path.insert(0,'+repr(str(ROOT/'mac_host'))+')\nfrom backend import Backend\nb=Backend(sys.executable,'+repr(str(ROOT.parent/'engine/maestro_analyse.py'))+','+repr(str(pathlib.Path(folder)/'data'))+')\nb.start()\nprint(json.dumps({"pid":b.process.pid,"url":b.url}),flush=True)\ntime.sleep(30)')
    parent=subprocess.Popen([sys.executable,str(script)],stdout=subprocess.PIPE,text=True)
    try:
     info=json.loads(parent.stdout.readline());port=urllib.parse.urlsplit(info['url']).port
