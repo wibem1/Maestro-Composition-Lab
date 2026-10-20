@@ -132,7 +132,7 @@ def repair(api, record, body):
     if not isinstance(record,dict) or not record.get('validation_error') or record.get('mode') not in ('compose','continue','instruments'):
         raise c.ScoreError('Kein korrigierbarer Kompositionsentwurf ausgewählt.')
     error=record['validation_error']
-    match=re.search(r'System (\\d+), Takt (\\d+), Stimme (\\d+): .* statt .*',error)
+    match=re.search(r'System (\d+), Takt (\d+), Stimme (\d+): .* statt .*',error)
     if not match:raise c.ScoreError('Dieser Fehler benötigt eine andere Korrektur. Original bleibt erhalten.')
     si,bi,vi=(int(v)-1 for v in match.groups())
     original=score_response.decode(record['raw_response'],[])
