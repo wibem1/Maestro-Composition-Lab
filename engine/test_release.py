@@ -5,7 +5,7 @@ from test_workspace import fragment
 ROOT=pathlib.Path(__file__).resolve().parent
 class ReleaseTests(unittest.TestCase):
  def test_surfaces_have_identical_controls_and_current_version(self):
-  pages=[(ROOT/'ui'/name).read_text() for name in ('mac.html','windows.html')]
+  pages=[(ROOT/'ui'/name).read_text(encoding='utf-8') for name in ('mac.html','windows.html')]
   self.assertEqual(*[set(re.findall(r'id="([^"]+)"',p)) for p in pages])
   for page in pages:
    self.assertIn('Maestro · 3.0.0 · 20.10.2026',page)
@@ -23,4 +23,4 @@ class ReleaseTests(unittest.TestCase):
  def test_truncated_answer_does_not_invent_music(self):
   with self.assertRaises(ValueError):score_response.decode(json.dumps(fragment())[:-20],[])
  def test_native_assembly_version(self):
-  self.assertIn('<Version>3.0.0</Version>',(ROOT.parent/'windows/desktop/MaestroDesktop.csproj').read_text())
+  self.assertIn('<Version>3.0.0</Version>',(ROOT.parent/'windows/desktop/MaestroDesktop.csproj').read_text(encoding='utf-8'))
