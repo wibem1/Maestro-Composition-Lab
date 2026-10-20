@@ -8,4 +8,4 @@ class PlatformUITest(unittest.TestCase):
   self.assertIn('__TOKEN__',mac)
   self.assertIn('__TOKEN__',win)
   self.assertNotEqual(mac,win)
- def test_version(self):self.assertEqual(m.VERSION,'3.0.0')
+ def test_version(self):self.assertEqual(m.VERSION,'3.0.1')

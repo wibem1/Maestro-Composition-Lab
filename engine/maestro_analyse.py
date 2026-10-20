@@ -1,4 +1,4 @@
-"""Composition Lab / Maestro Analyse 3.0.0 — 19.10.2026. Python stdlib only."""
+"""Composition Lab / Maestro Analyse 3.0.1 — 19.10.2026. Python stdlib only."""
 from __future__ import annotations
 import composition
 from analysis_text import readable
@@ -8,7 +8,7 @@ import uuid
 import shutil
 import datetime, http.server, json, os, pathlib, queue, secrets, subprocess, threading, time, urllib.error, urllib.parse, urllib.request, webbrowser
 
-VERSION='3.0.0'
+VERSION='3.0.1'
 ROOT=pathlib.Path(__file__).resolve().parent
 BEGIN='BEGIN_MAESTRO_REVIEW'
 END='END_MAESTRO_REVIEW'
