@@ -1,0 +1,72 @@
+{
+  "release": "20261013",
+  "dependencies": [
+    {
+      "kind": "runtime",
+      "arch": "aarch64",
+      "name": "cpython-3.13.16+20261013-aarch64-apple-darwin-install_only_stripped.tar.gz",
+      "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16%2B20261013-aarch64-apple-darwin-install_only_stripped.tar.gz",
+      "sha256": "16a5332fb0dcb77f163fc8f8cbccd95be1644cc53e68e5d2a79f50afd6680a0e"
+    },
+    {
+      "kind": "runtime",
+      "arch": "x86_64",
+      "name": "cpython-3.13.16+20261013-x86_64-apple-darwin-install_only_stripped.tar.gz",
+      "url": "https://github.com/astral-sh/python-build-standalone/releases/download/20261013/cpython-3.13.16%2B20261013-x86_64-apple-darwin-install_only_stripped.tar.gz",
+      "sha256": "f507ae04eb7747cd97cb484e8c5d83936cbfc52d9b08a1f35c00b47c707b1ae1"
+    },
+    {
+      "kind": "wheel",
+      "name": "pyobjc_core-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "package": "pyobjc-core",
+      "version": "12.2.2",
+      "url": "https://files.pythonhosted.org/packages/1b/ed/a8bf040caf3704023d74086b7fb96cf4ed2e844e24bd94e5248ba214b700/pyobjc_core-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "sha256": "950bd2d9c74634398c4e3d24ef2f213d4e23d705083697464fa67afedc53c1ad",
+      "requires": null
+    },
+    {
+      "kind": "wheel",
+      "name": "pyobjc_framework_cocoa-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "package": "pyobjc-framework-Cocoa",
+      "version": "12.2.2",
+      "url": "https://files.pythonhosted.org/packages/db/e1/5d9b04ebb60042b9cb49adc2d33115e2f2c2e4ff7d548017bfaff8b7f536/pyobjc_framework_cocoa-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "sha256": "600b1723184ca094931330e79355274949965460e23de38628d601b5a967baf9",
+      "requires": [
+        "pyobjc-core>=12.2.2"
+      ]
+    },
+    {
+      "kind": "wheel",
+      "name": "pyobjc_framework_webkit-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "package": "pyobjc-framework-WebKit",
+      "version": "12.2.2",
+      "url": "https://files.pythonhosted.org/packages/69/84/036541aaf4795c0022b6b1dda9a4e099e14b137012065a799a0b174947e5/pyobjc_framework_webkit-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "sha256": "206f88451e1c3e152c72c16c2af2664646cd752a3007c9cda8029a9e3f0ec9a4",
+      "requires": [
+        "pyobjc-core>=12.2.2",
+        "pyobjc-framework-Cocoa>=12.2.2"
+      ]
+    },
+    {
+      "kind": "wheel",
+      "name": "pyobjc_framework_security-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "package": "pyobjc-framework-Security",
+      "version": "12.2.2",
+      "url": "https://files.pythonhosted.org/packages/f1/7f/cef885aaf57f7b8c1a5c141dc118094d07558f6c289fabd63690abf30059/pyobjc_framework_security-12.2.2-cp313-cp313-macosx_10_13_universal2.whl",
+      "sha256": "ca580d5f56e1222d63f1322a4fbf63be0bad77e77cca084290310df007b3fdde",
+      "requires": [
+        "pyobjc-core>=12.2.2",
+        "pyobjc-framework-Cocoa>=12.2.2"
+      ]
+    },
+    {
+      "kind": "wheel",
+      "package": "certifi",
+      "version": "2026.10.18",
+      "name": "certifi-2026.10.18-py3-none-any.whl",
+      "url": "https://files.pythonhosted.org/packages/08/ba/95dd616042484f7c83a06974388b37b837732740ee70bc5dc715b5fcd55a/certifi-2026.10.18-py3-none-any.whl",
+      "sha256": "73191c47aaa79da394e8fee2dbc2ec827432cab56311122c9e47abf79e390f62",
+      "requires": []
+    }
+  ]
+}

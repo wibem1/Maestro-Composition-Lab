@@ -1,0 +1,23 @@
+# Build artifacts and bundled runtimes
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+runtime/
+runtimes/
+*.app/
+*.exe
+*.dll
+*.pyd
+*.zip
+.DS_Store
+# User data and secrets
+.env
+.env.*
+!*.env.example
+*.key
+*.pem
+*.p12
+Diagnose-*.json
+Maestro-App-Diagnose*.json
+Ergebnisse/
