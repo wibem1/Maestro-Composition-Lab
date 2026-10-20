@@ -4,6 +4,9 @@ import preferences as p
 import maestro_analyse as a
 
 class Tests(unittest.TestCase):
+ def setUp(self):
+  # DPAPI adapter unit tests; Keychain has its own host test suite.
+  platform=patch.object(p.sys,'platform','win32');platform.start();self.addCleanup(platform.stop)
  def test_no_plaintext_key_and_provider_profiles(self):
   with tempfile.TemporaryDirectory() as folder,patch.object(p,'settings_path',return_value=pathlib.Path(folder)/'settings.json'):
    with patch.object(p,'crypt',side_effect=lambda data,decrypt=False: b'sealed' if not decrypt else b'secret'):

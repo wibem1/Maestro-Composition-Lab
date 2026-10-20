@@ -61,10 +61,15 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.13'
-      - run: python -m unittest discover -s engine -p 'test_*.py' -v
-      - run: python engine/selftest.py
-      - run: python -m unittest discover -s macos/mac_tests -v
       - run: python macos/build_mac.py --arch ${{ matrix.arch }}
+      - name: Test using bundled interpreter and native frameworks
+        env:
+          LABEL: ${{ matrix.label }}
+        run: |
+          PY="$PWD/dist/Maestro-Composition-Lab-3.0.0-Mac-$LABEL/Maestro Composition Lab.app/Contents/Resources/runtime/bin/python3.13"
+          "$PY" -m unittest discover -s engine -p 'test_*.py' -v
+          "$PY" engine/selftest.py
+          "$PY" -m unittest discover -s macos/mac_tests -v
       - name: Verify bundle and native runtime
         env:
           LABEL: ${{ matrix.label }}
