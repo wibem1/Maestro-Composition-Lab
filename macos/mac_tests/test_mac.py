@@ -26,7 +26,7 @@ class Tests(unittest.TestCase):
    data=pathlib.Path(folder)/'Benutzerdaten';b=backend.Backend(sys.executable,ROOT.parent/'engine/maestro_analyse.py',data)
    b.start();proc=b.process
    try:
-    self.assertEqual(b.request('desktop/info',{})['version'],'3.0.0')
+    self.assertEqual(b.request('desktop/info',{})['version'],'3.0.1')
     result=b.request('workspace/load',{'text':json.dumps({'composition':fragment()})})
     self.assertTrue(pathlib.Path(result['saved_path']).is_relative_to(data))
     self.assertEqual(b.request('workspace/history',{})['total'],1)
