@@ -10,7 +10,7 @@ SOURCE=Path(__file__).resolve().parent;ROOT=SOURCE.parent
 LOCK=json.loads((SOURCE/'dependencies.json').read_text())
 CACHE=ROOT/'build/dependencies'
 APP='Maestro Composition Lab.app'
-VERSION='3.0.0'
+VERSION='3.0.1'
 
 def source_dependency(item):
  CACHE.mkdir(parents=True,exist_ok=True);path=CACHE/item['name']
